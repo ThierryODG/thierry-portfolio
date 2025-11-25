@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Mail, Phone, Linkedin, Facebook, X, Image as ImageIcon, ChevronLeft, ChevronRight, Palette, Pen, Layers, Sparkles } from 'lucide-react';
 import { SiWhatsapp, SiTiktok } from 'react-icons/si';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface ProjectImage {
   filename: string;
@@ -101,6 +103,8 @@ function App() {
   // Get random images for mosaic background
   const mosaicImages = allImages.slice(0, 20);
 
+  // Composant ImageWithLoader supprimé en faveur de react-lazy-load-image-component
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary-light to-primary-dark text-white">
       {/* Hero Section */}
@@ -125,16 +129,24 @@ function App() {
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  <img
+                  <LazyLoadImage
                     src={`/02-CONCEPTION${img.path}`}
                     alt=""
+                    effect="blur"
+                    wrapperClassName="w-full h-full block"
                     className="w-full h-full object-cover"
                   />
                 </div>
               ))}
             </div>
           </div>
-          {/* Gradient Overlay - stronger at bottom, fades at top */}
+          {/*
+            POUR CHANGER L'OPACITÉ DU DÉGRADÉ NOIR :
+            Modifiez les valeurs après le slash (/) :
+            - via-primary/95 = 95% d'opacité au milieu
+            - to-primary/60 = 60% d'opacité en haut
+            Plus le chiffre est petit, plus c'est transparent.
+          */}
           <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/95 to-primary/60"></div>
         </div>
 
@@ -371,12 +383,14 @@ function App() {
                     if (project) setSelectedProject(project);
                   }}
                 >
-                  <img
+                  <LazyLoadImage
                     src={`/02-CONCEPTION${image.path}`}
                     alt={image.filename}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    effect="blur"
+                    wrapperClassName="w-full h-full block group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       <p className="text-white font-semibold text-sm line-clamp-1">{image.projectName}</p>
                       <p className="text-slate-300 text-xs">{image.category}</p>
@@ -436,10 +450,12 @@ function App() {
               className="max-w-5xl w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <LazyLoadImage
                 src={`/02-CONCEPTION${lightboxImages[currentImageIndex].path}`}
                 alt={lightboxImages[currentImageIndex].filename}
-                className="w-full h-auto max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                effect="blur"
+                wrapperClassName="w-full h-auto block"
+                className="w-full h-auto max-h-[85vh] object-contain rounded-lg shadow-2xl bg-black/50"
               />
               <div className="mt-4 text-center">
                 <p className="text-white font-semibold text-lg">
@@ -498,9 +514,11 @@ function App() {
                           idx
                         )}
                       >
-                        <img
+                        <LazyLoadImage
                           src={`/02-CONCEPTION${image.path}`}
                           alt={image.filename}
+                          effect="blur"
+                          wrapperClassName="w-full h-full block"
                           className="w-full h-full object-cover hover:scale-105 transition-transform"
                         />
                       </div>
@@ -521,9 +539,11 @@ function App() {
                             idx
                           )}
                         >
-                          <img
+                          <LazyLoadImage
                             src={`/02-CONCEPTION${image.path}`}
                             alt={image.filename}
+                            effect="blur"
+                            wrapperClassName="w-full h-full block"
                             className="w-full h-full object-cover hover:scale-105 transition-transform"
                           />
                         </div>
